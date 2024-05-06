@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Stream</title>
+</head>
+<body>
+  <video id="video" width="640" height="480" autoplay></video>
+  <button id="startButton">Start Streaming</button>
+  <button id="stopButton">Stop Streaming</button>
+
+  <script>
+    const video = document.getElementById('video');
+    const startButton = document.getElementById('startButton');
+    const stopButton = document.getElementById('stopButton');
+    let stream;
+    let mediaRecorder = null;
+
+    startButton.addEventListener('click', async () => {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        video.srcObject = stream;
+        startButton.disabled = true;
+        stopButton.disabled = false;
+
+        const socket = io();
+
+        // Get video track from stream
+        const videoTrack = stream.getVideoTracks()[0];
+
+        // Create a new MediaStream object with only the video track
+        const videoStream = new MediaStream([videoTrack]);
+
+        // Send the video stream to the server
+        const mediaRecorder = new MediaRecorder(videoStream);
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data.size > 0) {
+            socket.emit('stream', e.data);
+          }
+        };
+        mediaRecorder.start();
+      } catch (error) {
+        console.error('Error accessing media devices:', error);
+      }
+    });
+
+    stopButton.addEventListener('click', () => {
+      if (mediaRecorder) {
+        mediaRecorder.stop();
+      }
+      stream.getTracks().forEach((track) => {
+        track.stop();
+      });
+      video.srcObject = null;
+      startButton.disabled = false;
+      stopButton.disabled = true;
+    });
+
+    const socket = io();
+    socket.on('stream', (data) => {
+      video.srcObject = null; // Clear previous stream
+      video.src = URL.createObjectURL(data); // Set new stream
+    });
+  </script>
+
+  <script src="/socket.io/socket.io.js"></script>
+</body>
+</html>
