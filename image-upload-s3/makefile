@@ -24,3 +24,6 @@ prod:
 
 web:
 	open photogram.store
+
+cli-app:
+	docker-compose exec app sh
