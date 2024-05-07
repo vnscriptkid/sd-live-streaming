@@ -123,3 +123,36 @@ ssh -T git@github.com
   - Host: @
   - Value: EC2 public IP
   - TTL: Automatic
+
+### Setup CDN CloudFront
+- Create distribution
+    - Origin Domain Name: s3 bucket
+- Configure S3 Bucket Policy
+    - Bucket > Permissions > Bucket Policy
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "cloudfront.amazonaws.com"
+      },
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::image-upload-app/*",
+      "Condition": {
+        "StringEquals": {
+          "AWS:SourceArn": "arn:aws:cloudfront::YOUR_AWS_ACCOUNT_ID:distribution/EXAMPLE"
+        }
+      }
+    }
+  ]
+}
+```
+- Update image url in react app
+    - From: https://image-upload-app.s3.ap-southeast-1.amazonaws.com/xyz.jpeg
+    - To: https://d1v7v7j7ef9v1.cloudfront.net/xyz.jpeg
+- Test loading image in browser
+    - First time: X-Cache: Miss from cloudfront
+    - Second time: X-Cache: Hit from cloudfront
+  

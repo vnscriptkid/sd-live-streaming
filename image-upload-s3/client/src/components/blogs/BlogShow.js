@@ -11,10 +11,7 @@ class BlogShow extends Component {
     if (this.props.blog.imageUrl) {
       return (
         <img
-          src={
-            'https://image-upload-app.s3.ap-southeast-1.amazonaws.com/' +
-            this.props.blog.imageUrl
-          }
+          src={`https://d38ap9bqzjdbpl.cloudfront.net/${this.props.blog.imageUrl}`}
         />
       );
     }
