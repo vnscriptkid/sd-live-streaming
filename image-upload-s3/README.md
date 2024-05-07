@@ -82,10 +82,12 @@ Starting project for a course on Advanced Node @ Udemy
 - setup docker
 ```sh
 sudo amazon-linux-extras install docker
-sudo service docker start
 sudo usermod -a -G docker ec2-user
-sudo curl -L "https://github.com/docker/compose/releases/download/2.27.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+# logout and login again
+sudo service docker start
+sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
+docker-compose version
 ```
 - setup git
 ```sh
@@ -98,3 +100,26 @@ ssh-add ~/.ssh/id_rsa
 cat ~/.ssh/id_rsa.pub
 ssh -T git@github.com
 ```
+
+### Setup oauth
+- Google
+  - https://console.developers.google.com/
+  - Create project
+  - Credentials
+    - Create credentials
+    - OAuth client ID
+    - Web application
+    - Authorized JavaScript origins: http://photogram.store
+    - Authorized redirect URIs: http://photogram.store/auth/google/callback
+    - Create
+    - Copy client ID and client secret
+
+### Setup domain namecheap
+- Buy domain name: photogram.store
+- https://ap.www.namecheap.com/
+- Dashboard > Domain List > Manage > Advanced DNS
+- Add new record
+  - Type: A Record
+  - Host: @
+  - Value: EC2 public IP
+  - TTL: Automatic
