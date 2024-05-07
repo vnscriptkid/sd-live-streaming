@@ -156,3 +156,19 @@ ssh -T git@github.com
     - First time: X-Cache: Miss from cloudfront
     - Second time: X-Cache: Hit from cloudfront
   
+```mermaid
+sequenceDiagram
+    participant User as User Browser
+    participant CDN as CloudFront CDN
+    participant S3 as S3 Bucket
+
+    User->>CDN: HTTP GET /image-path
+    alt Cache Miss
+        CDN->>S3: HTTP GET /image-path
+        S3-->>CDN: 200 OK<br>Image Data
+        CDN-->>User: 200 OK<br>Image Data<br>X-Cache: Miss
+    else Cache Hit
+        CDN-->>User: 200 OK<br>Cached Image Data<br>X-Cache: Hit
+    end
+
+```
