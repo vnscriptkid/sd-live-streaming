@@ -1,11 +1,10 @@
 module.exports = {
-  googleClientID:
-    '70265989829-0t7m7ce5crs6scqd3t0t6g7pv83ncaii.apps.googleusercontent.com',
-  googleClientSecret: '8mkniDQOqacXtlRD3gA4n2az',
+  googleClientID: process.env.GOOGLE_CLIENT_ID,
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   mongoURI: process.env.MONGO_URI,
-  cookieKey: '123123123',
+  cookieKey: process.env.COOKIE_KEY,
   redisUrl: process.env.REDIS_URL,
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  s3Bucket: 'image-upload-app'
+  s3Bucket: process.env.S3_BUCKET,
 };

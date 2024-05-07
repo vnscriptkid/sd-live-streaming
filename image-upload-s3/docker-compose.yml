@@ -13,11 +13,22 @@ services:
     image: mongo:6.0.4
     container_name: mongo
     ports:
-      - "27019:27017"
+      - "27017:27017"
     environment:
       - MONGO_INITDB_DATABASE=posts
     volumes:
       - mongo-data:/data/db
+
+  app:
+    build: .
+    container_name: app
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env.development
+    depends_on:
+      - redis
+      - mongo
 
 volumes:
   redis-data:
