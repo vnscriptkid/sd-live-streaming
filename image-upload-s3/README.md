@@ -74,3 +74,27 @@ Starting project for a course on Advanced Node @ Udemy
 - Best practise
   - Store the path of the image in the database: `${user.id}/${filename}`
   - Link can be dynamically generated: `https://s3.amazonaws.com/image-upload-app/${user.id}/${filename}`
+
+### depl to ec2
+- EC2 > Launch an instance
+- image-upload-server
+- ssh to ec2
+- setup docker
+```sh
+sudo amazon-linux-extras install docker
+sudo service docker start
+sudo usermod -a -G docker ec2-user
+sudo curl -L "https://github.com/docker/compose/releases/download/2.27.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+```
+- setup git
+```sh
+sudo yum install git -y
+git config --global user.name "Thanh Nguyen"
+git config --global user.email "vnscriptkid@gmail.com"
+ssh-keygen -t rsa -b 4096 -C "vnscriptkid@gmail.com"
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub
+ssh -T git@github.com
+```

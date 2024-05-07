@@ -12,3 +12,9 @@ mongo:
 
 log-app:
 	docker compose logs -f app
+
+ssh:
+	ssh -i "macos-carousell.pem" ec2-user@47.129.30.245
+
+chmod:
+	chmod 600 macos-carousell.pem
